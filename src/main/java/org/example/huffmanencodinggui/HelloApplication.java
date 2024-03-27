@@ -14,7 +14,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -64,16 +66,19 @@ public class HelloApplication extends Application {
 
     public void drawNodeRecursive(int x1,int y1,int x,int y, int width, TreeNode node){
         Line line = new Line(x1, y1, x, y);
+        line.setStrokeWidth(2);
         nodeGroup.getChildren().add(line);
         Text txt;
         if (node.isLeaf()) {
-            Circle circle = new Circle(x, y, 15, Paint.valueOf("lightblue"));
+            txt = new Text(x, y, "'" + node.getCharacter() + "'" + "\n" + node.getCodeValue());
+            Circle circle = new Circle(x, y, txt.getLayoutBounds().getWidth(), Paint.valueOf("lightgrey"));
             nodeGroup.getChildren().add(circle);
-            txt = new Text(x - 3, y, "'" + node.getCharacter() + "'" + "\n" + node.getCodeValue());
-
         } else {
-            txt = new Text(x - 3, y + 15, node.getCodeValue());
+            txt = new Text(x, y + 15, node.getCodeValue());
         }
+        txt.setStyle("-fx-font-weight: bold");
+        txt.setTextAlignment(TextAlignment.CENTER);
+        txt.setTranslateX(txt.getTranslateX() - (txt.getLayoutBounds().getWidth() / 2));
         nodeGroup.getChildren().add(txt);
         if(node.getLeft() != null)
             drawNodeRecursive(x,y,x-(width / 2),y+50, width / 2, node.getLeft());
