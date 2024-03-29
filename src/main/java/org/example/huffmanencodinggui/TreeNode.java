@@ -94,6 +94,8 @@ public class TreeNode {
                 + " ".repeat(indentCount) + "<Node>\n";
     }
 
+
+
     public String getXML() {
         return this.getXML(0);
     }
