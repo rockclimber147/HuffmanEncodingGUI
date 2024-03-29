@@ -1,6 +1,7 @@
 package org.example.huffmanencodinggui;
 
 public class TreeNode {
+    private static final int CHARACTER_PIXEL_WIDTH = 20;
     private static int xmlIndentCountIncrement = 2;
     private TreeNode left;
     private TreeNode right;
@@ -63,6 +64,23 @@ public class TreeNode {
         return this.left == null && this.right == null;
     }
 
+    public int getWidthNeeded() {
+        if (this.isLeaf()) {
+            System.out.println(this.codeValue + " : " + CHARACTER_PIXEL_WIDTH * this.codeValue.length());
+            return CHARACTER_PIXEL_WIDTH * this.codeValue.length();
+        }
+        int leftWidth = 0;
+        if (this.left != null) {
+            leftWidth = this.left.getWidthNeeded();
+        }
+
+        int rightWidth = 0;
+        if (this.right != null) {
+            rightWidth = this.right.getWidthNeeded();
+        }
+        System.out.println(this.codeValue + " : " + (leftWidth + 10 + rightWidth));
+        return leftWidth + 10 + rightWidth;
+    }
     public void generateCodeValue() {
         generateCodeValue("");
     }
@@ -120,21 +138,9 @@ public class TreeNode {
     }
 
     public static void main(String[] args) {
-        TreeNode A = new TreeNode('A');
-        TreeNode B = new TreeNode('B');
-        TreeNode C = new TreeNode('C');
-        TreeNode D = new TreeNode('D');
-        TreeNode E = new TreeNode('E');
-        TreeNode F = new TreeNode('F');
-
-        TreeNode AB = new TreeNode(A,B);
-        TreeNode DE = new TreeNode(D,E);
-        TreeNode AB_C = new TreeNode(AB, C);
-        TreeNode F_ = new TreeNode(F, null);
-        TreeNode DE_F_ = new TreeNode(DE, F_);
-        TreeNode root = new TreeNode(AB_C, DE_F_);
-        System.out.println(root.getXML());
+        TreeNode root = new TreeNode(new TreeNode(new TreeNode('A'), new TreeNode('B')), new TreeNode(new TreeNode('C'), new TreeNode('D')));
         root.generateCodeValue("");
+        root.getWidthNeeded();
         System.out.println(root.getXML());
     }
 }

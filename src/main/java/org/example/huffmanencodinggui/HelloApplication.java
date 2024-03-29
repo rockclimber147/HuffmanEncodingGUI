@@ -29,7 +29,6 @@ public class HelloApplication extends Application {
 
     private double prevMouseX;
     private double prevMouseY;
-    double zoomFactor = 1;
 
     public void start(Stage stage) {
         drawField = new Pane();
@@ -47,7 +46,10 @@ public class HelloApplication extends Application {
         HuffmanTreeGenerator gen = new HuffmanTreeGenerator("ANNA AND DANNY");
         TreeNode root = gen.getHuffmanTree();
 
-        drawNodeRecursive(200,200,500,200, APP_WIDTH / 2, root);
+        int maxDepth = maxDepth(root);
+        int maxTreeWidth = (2 << (maxDepth - 1)) * maxDepth * 5;
+        drawNodeRecursive(APP_WIDTH / 2, 20, APP_WIDTH / 2, 50, root.getWidthNeeded(), root);
+
         drawField.getChildren().addAll(nodeGroup, hb);
         Scene scene = new Scene(drawField, APP_WIDTH, APP_HEIGHT);
         stage.setTitle("Huffman Encoding!");
@@ -60,9 +62,8 @@ public class HelloApplication extends Application {
                 nodeGroup.getChildren().clear();
                 gen.setSourceText(text);
                 TreeNode rootNode = gen.getHuffmanTree();
-                int maxDepth = maxDepth(rootNode);
-                int maxTreeWidth = (2 << (maxDepth - 1)) * maxDepth * 5;
-                drawNodeRecursive(APP_WIDTH / 2, 50, APP_WIDTH / 2, 50, maxTreeWidth, rootNode);
+                int width = ((2 << (maxDepth(rootNode) - 1)) * maxDepth(rootNode) * 5);
+                drawNodeRecursive(APP_WIDTH / 2, 20, APP_WIDTH / 2, 50, rootNode.getWidthNeeded(), rootNode);
                 stage.setScene(scene);
             });
         });
@@ -70,8 +71,9 @@ public class HelloApplication extends Application {
         scene.setOnScroll(event -> {
             double zoomFactor = 1.05;
             double deltaY = event.getDeltaY();
+
             if (deltaY < 0){
-                zoomFactor = 2.0 - zoomFactor;
+                zoomFactor = 0.95;
             }
             nodeGroup.setScaleX(nodeGroup.getScaleX() * zoomFactor);
             nodeGroup.setScaleY(nodeGroup.getScaleY() * zoomFactor);
@@ -89,9 +91,7 @@ public class HelloApplication extends Application {
             double deltaX = prevMouseX - newMouseX;
             double deltaY = prevMouseY - newMouseY;
 
-            nodeGroup.setTranslateX(nodeGroup.getTranslateX() - deltaX);
-            nodeGroup.setTranslateY(nodeGroup.getTranslateY() - deltaY);
-
+            shiftTree(deltaX, deltaY);
             prevMouseX = newMouseX;
             prevMouseY = newMouseY;
         });
@@ -101,6 +101,11 @@ public class HelloApplication extends Application {
         Line line = new Line(x1, y1, x, y);
         line.setStrokeWidth(2);
         nodeGroup.getChildren().add(line);
+
+        if (node == null) {
+            return;
+        }
+
         Text txt;
         if (node.isLeaf()) {
             txt = new Text(x, y, "'" + node.getCharacter() + "'" + "\n" + node.getCodeValue());
@@ -109,18 +114,24 @@ public class HelloApplication extends Application {
         } else {
             txt = new Text(x, y + 15, node.getCodeValue());
         }
+
         txt.setStyle("-fx-font-weight: bold");
         txt.setTextAlignment(TextAlignment.CENTER);
         txt.setTranslateX(txt.getTranslateX() - (txt.getLayoutBounds().getWidth() / 2));
         nodeGroup.getChildren().add(txt);
+
         if(node.getLeft() != null)
-            drawNodeRecursive(x,y,x-(width / 2),y+50, width / 2, node.getLeft());
+            drawNodeRecursive(x,y,x-(width / 2),y+50, node.getLeft().getWidthNeeded(), node.getLeft());
         if(node.getRight() != null)
-            drawNodeRecursive(x,y,x+(width / 2),y+50, width / 2, node.getRight());
+            drawNodeRecursive(x,y,x+(width / 2),y+50, node.getRight().getWidthNeeded(), node.getRight());
     }
 
-    int maxDepth(TreeNode node)
-    {
+    private void shiftTree(double deltaX, double deltaY) {
+        nodeGroup.setTranslateX(nodeGroup.getTranslateX() - deltaX);
+        nodeGroup.setTranslateY(nodeGroup.getTranslateY() - deltaY);
+    }
+
+    public int maxDepth(TreeNode node) {
         if (node == null)
             return 0;
         else {
