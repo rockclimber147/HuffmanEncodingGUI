@@ -138,11 +138,4 @@ public class TreeNode {
                 + " ".repeat(indentCount + xmlIndentCountIncrement) + "|" + this.character + "|" + this.codeValue
                         + ((this.right == null) ? "\n" : (this.right.getAbridgedString(indentCount + 2 * xmlIndentCountIncrement)));
     }
-
-    public static void main(String[] args) {
-        TreeNode root = new TreeNode(new TreeNode(new TreeNode('A'), new TreeNode('B')), new TreeNode(new TreeNode('C'), new TreeNode('D')));
-        root.generateCodeValue("");
-        root.getWidthNeeded();
-        System.out.println(root.getXML());
-    }
 }

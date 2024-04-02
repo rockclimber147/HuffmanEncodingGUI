@@ -15,7 +15,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
-public class HelloApplication extends Application {
+public class HuffmanTreeVisualizer extends Application {
     private final int APP_WIDTH = 750;
     private Group nodeGroup;
 

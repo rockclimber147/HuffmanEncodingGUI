@@ -84,17 +84,4 @@ public class HuffmanTreeGenerator {
             populateTable(table, right);
         }
     }
-
-
-    public static void main(String[] args) {
-        HuffmanTreeGenerator gen = new HuffmanTreeGenerator("ANNA AND DANNY");
-        HashMap<Character, Integer> map = gen.getCharFrequencyMap();
-        System.out.println("CFM: " + map + "\n");
-
-        PriorityQueue<Map.Entry<TreeNode, Integer>> queue = gen.getPriorityQueue(map);
-        System.out.println(queue);
-        TreeNode root = gen.getHuffmanTree(queue);
-        root.generateCodeValue();
-        System.out.println(gen.getCodeTable(root));
-    }
 }
