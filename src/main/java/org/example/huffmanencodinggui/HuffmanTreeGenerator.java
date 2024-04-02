@@ -1,9 +1,6 @@
 package org.example.huffmanencodinggui;
 
-import java.util.AbstractMap;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.PriorityQueue;
+import java.util.*;
 
 public class HuffmanTreeGenerator {
     private String sourceText;
@@ -11,11 +8,6 @@ public class HuffmanTreeGenerator {
     public HuffmanTreeGenerator(final String sourceText) {
         this.sourceText = sourceText;
     }
-
-    public String getSourceText() {
-        return sourceText;
-    }
-
     public void setSourceText(String sourceText) {
         this.sourceText = sourceText;
     }
@@ -24,22 +16,22 @@ public class HuffmanTreeGenerator {
         TreeNode root = new TreeNode();
         if (priorityQueue.size() == 1) {
             root.setLeft(new TreeNode(priorityQueue.poll().getKey().getCharacter()));
-            return root;
-        } else if (priorityQueue.isEmpty()) {
-            return root;
-        }
-        while (priorityQueue.size() > 2) {
-            Map.Entry<TreeNode, Integer> left = priorityQueue.poll();
-            Map.Entry<TreeNode, Integer> right = priorityQueue.poll();
-            TreeNode temp = new TreeNode(left.getKey(), right.getKey());
-            Map.Entry<TreeNode,Integer> entry = new AbstractMap.SimpleEntry<>(temp, left.getValue() + right.getValue());
-            priorityQueue.add(entry);
-        }
+        } else if (priorityQueue.size() >= 2){
 
-        root.setLeft(priorityQueue.poll().getKey());
-        root.setRight(priorityQueue.poll().getKey());
-        root.generateCodeValue();
+            while (priorityQueue.size() > 2) {
+                Map.Entry<TreeNode, Integer> left = priorityQueue.poll();
+                Map.Entry<TreeNode, Integer> right = priorityQueue.poll();
+                TreeNode temp = new TreeNode(left.getKey(), Objects.requireNonNull(right).getKey());
 
+                Map.Entry<TreeNode,Integer> entry =
+                        new AbstractMap.SimpleEntry<>(temp, left.getValue() + right.getValue());
+                priorityQueue.add(entry);
+            }
+
+            root.setLeft(Objects.requireNonNull(priorityQueue.poll()).getKey());
+            root.setRight(Objects.requireNonNull(priorityQueue.poll()).getKey());
+            root.generateCodeValue();
+        }
         return root;
     }
 
@@ -52,7 +44,6 @@ public class HuffmanTreeGenerator {
         for (int i = 0; i < this.sourceText.length(); i++) {
             charFrequencyMap.merge(this.sourceText.charAt(i), 1, Integer::sum);
         }
-//        System.out.println("CHARACTER FREQUENCIES:\n" + charFrequencyMap);
         return charFrequencyMap;
     }
 
