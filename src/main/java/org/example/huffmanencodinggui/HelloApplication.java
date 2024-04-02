@@ -121,9 +121,9 @@ public class HelloApplication extends Application {
         nodeGroup.getChildren().add(txt);
 
         if(node.getLeft() != null)
-            drawNodeRecursive(x,y,x-(width / 2),y+50, node.getLeft().getWidthNeeded(), node.getLeft());
+            drawNodeRecursive(x,y,x-((width - TreeNode.getNodeSpacing()) / 2),y + 50, node.getLeft().getWidthNeeded(), node.getLeft());
         if(node.getRight() != null)
-            drawNodeRecursive(x,y,x+(width / 2),y+50, node.getRight().getWidthNeeded(), node.getRight());
+            drawNodeRecursive(x,y,x+((width - TreeNode.getNodeSpacing()) / 2),y + 50, node.getRight().getWidthNeeded(), node.getRight());
     }
 
     private void shiftTree(double deltaX, double deltaY) {

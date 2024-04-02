@@ -1,7 +1,8 @@
 package org.example.huffmanencodinggui;
 
 public class TreeNode {
-    private static final int CHARACTER_PIXEL_WIDTH = 20;
+    private static final int CHARACTER_PIXEL_WIDTH = 15;
+    private static final int NODE_SPACING_PIXEL_WIDTH = 10;
     private static int xmlIndentCountIncrement = 2;
     private TreeNode left;
     private TreeNode right;
@@ -20,6 +21,10 @@ public class TreeNode {
 
     public TreeNode() {
         this.character = Character.MAX_VALUE;
+    }
+
+    public static int getNodeSpacing(){
+        return NODE_SPACING_PIXEL_WIDTH;
     }
 
     public TreeNode getLeft() {
@@ -66,20 +71,17 @@ public class TreeNode {
 
     public int getWidthNeeded() {
         if (this.isLeaf()) {
-//            System.out.println(this.codeValue + " : " + CHARACTER_PIXEL_WIDTH * this.codeValue.length());
             return CHARACTER_PIXEL_WIDTH * this.codeValue.length();
         }
-        int leftWidth = 0;
+        int totalWidthNeeded = 0;
         if (this.left != null) {
-            leftWidth = this.left.getWidthNeeded();
+            totalWidthNeeded += this.left.getWidthNeeded();
         }
 
-        int rightWidth = 0;
         if (this.right != null) {
-            rightWidth = this.right.getWidthNeeded();
+            totalWidthNeeded += this.right.getWidthNeeded();
         }
-//        System.out.println(this.codeValue + " : " + (leftWidth + 10 + rightWidth));
-        return leftWidth + 10 + rightWidth;
+        return totalWidthNeeded + NODE_SPACING_PIXEL_WIDTH;
     }
     public void generateCodeValue() {
         generateCodeValue("");

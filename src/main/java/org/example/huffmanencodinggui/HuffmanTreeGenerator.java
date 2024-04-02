@@ -8,6 +8,7 @@ public class HuffmanTreeGenerator {
     public HuffmanTreeGenerator(final String sourceText) {
         this.sourceText = sourceText;
     }
+
     public void setSourceText(String sourceText) {
         this.sourceText = sourceText;
     }
@@ -94,7 +95,6 @@ public class HuffmanTreeGenerator {
         System.out.println(queue);
         TreeNode root = gen.getHuffmanTree(queue);
         root.generateCodeValue();
-//        System.out.println(root.getXML());
         System.out.println(gen.getCodeTable(root));
     }
 }
