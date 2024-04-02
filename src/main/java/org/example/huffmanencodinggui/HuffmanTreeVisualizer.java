@@ -55,6 +55,10 @@ public class HuffmanTreeVisualizer extends Application {
                 TreeNode rootNode = gen.getHuffmanTree();
                 drawNodeRecursive(APP_WIDTH / 2, 20, APP_WIDTH / 2, 50, rootNode.getWidthNeeded(), rootNode);
                 stage.setScene(scene);
+
+                // CONSOLE LOGGING
+                System.out.println("CHARACTER FREQUENCIES:\n" + gen.getCharFrequencyMap());
+                System.out.println("\nCHARACTER CODE TABLE:\n" + gen.getCodeTable(rootNode));
             })
         );
 
