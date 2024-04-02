@@ -66,7 +66,7 @@ public class TreeNode {
 
     public int getWidthNeeded() {
         if (this.isLeaf()) {
-            System.out.println(this.codeValue + " : " + CHARACTER_PIXEL_WIDTH * this.codeValue.length());
+//            System.out.println(this.codeValue + " : " + CHARACTER_PIXEL_WIDTH * this.codeValue.length());
             return CHARACTER_PIXEL_WIDTH * this.codeValue.length();
         }
         int leftWidth = 0;
@@ -78,7 +78,7 @@ public class TreeNode {
         if (this.right != null) {
             rightWidth = this.right.getWidthNeeded();
         }
-        System.out.println(this.codeValue + " : " + (leftWidth + 10 + rightWidth));
+//        System.out.println(this.codeValue + " : " + (leftWidth + 10 + rightWidth));
         return leftWidth + 10 + rightWidth;
     }
     public void generateCodeValue() {

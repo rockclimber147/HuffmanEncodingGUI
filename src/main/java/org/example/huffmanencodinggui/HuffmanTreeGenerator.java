@@ -53,6 +53,7 @@ public class HuffmanTreeGenerator {
         for (int i = 0; i < this.sourceText.length(); i++) {
             charFrequencyMap.merge(this.sourceText.charAt(i), 1, Integer::sum);
         }
+//        System.out.println("CHARACTER FREQUENCIES:\n" + charFrequencyMap);
         return charFrequencyMap;
     }
 
