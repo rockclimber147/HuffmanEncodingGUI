@@ -2,9 +2,6 @@ package org.example.huffmanencodinggui;
 
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -14,24 +11,19 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-
 public class HelloApplication extends Application {
     private final int APP_WIDTH = 750;
-    private final int APP_HEIGHT = 600;
-    private Pane drawField;
     private Group nodeGroup;
 
     private double prevMouseX;
     private double prevMouseY;
 
     public void start(Stage stage) {
-        drawField = new Pane();
+        Pane drawField = new Pane();
         nodeGroup = new Group();
 
         Button btn = new Button();
@@ -46,27 +38,25 @@ public class HelloApplication extends Application {
         HuffmanTreeGenerator gen = new HuffmanTreeGenerator("ANNA AND DANNY");
         TreeNode root = gen.getHuffmanTree();
 
-        int maxDepth = maxDepth(root);
-        int maxTreeWidth = (2 << (maxDepth - 1)) * maxDepth * 5;
         drawNodeRecursive(APP_WIDTH / 2, 20, APP_WIDTH / 2, 50, root.getWidthNeeded(), root);
 
         drawField.getChildren().addAll(nodeGroup, hb);
+        int APP_HEIGHT = 600;
         Scene scene = new Scene(drawField, APP_WIDTH, APP_HEIGHT);
         stage.setTitle("Huffman Encoding!");
         stage.setScene(scene);
         stage.show();
 
-        btn.setOnAction(event -> {
+        btn.setOnAction(event ->
             Platform.runLater(() -> {
                 String text = textField.getText();
                 nodeGroup.getChildren().clear();
                 gen.setSourceText(text);
                 TreeNode rootNode = gen.getHuffmanTree();
-                int width = ((2 << (maxDepth(rootNode) - 1)) * maxDepth(rootNode) * 5);
                 drawNodeRecursive(APP_WIDTH / 2, 20, APP_WIDTH / 2, 50, rootNode.getWidthNeeded(), rootNode);
                 stage.setScene(scene);
-            });
-        });
+            })
+        );
 
         scene.setOnScroll(event -> {
             double zoomFactor = 1.05;
@@ -129,22 +119,6 @@ public class HelloApplication extends Application {
     private void shiftTree(double deltaX, double deltaY) {
         nodeGroup.setTranslateX(nodeGroup.getTranslateX() - deltaX);
         nodeGroup.setTranslateY(nodeGroup.getTranslateY() - deltaY);
-    }
-
-    public int maxDepth(TreeNode node) {
-        if (node == null)
-            return 0;
-        else {
-            /* compute the depth of each subtree */
-            int lDepth = maxDepth(node.getLeft());
-            int rDepth = maxDepth(node.getRight());
-
-            /* use the larger one */
-            if (lDepth > rDepth)
-                return (lDepth + 1);
-            else
-                return (rDepth + 1);
-        }
     }
 
     public static void main(String[] args) {
