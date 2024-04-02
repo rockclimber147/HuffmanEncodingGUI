@@ -1,5 +1,6 @@
 package org.example.huffmanencodinggui;
 
+import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.PriorityQueue;
@@ -31,10 +32,8 @@ public class HuffmanTreeGenerator {
             Map.Entry<TreeNode, Integer> left = priorityQueue.poll();
             Map.Entry<TreeNode, Integer> right = priorityQueue.poll();
             TreeNode temp = new TreeNode(left.getKey(), right.getKey());
-            temp.generateCodeValue();
-            HashMap<TreeNode, Integer> temp2 = new HashMap<>();
-            temp2.put(temp, left.getValue() + right.getValue());
-            priorityQueue.addAll(temp2.entrySet());
+            Map.Entry<TreeNode,Integer> entry = new AbstractMap.SimpleEntry<>(temp, left.getValue() + right.getValue());
+            priorityQueue.add(entry);
         }
 
         root.setLeft(priorityQueue.poll().getKey());
