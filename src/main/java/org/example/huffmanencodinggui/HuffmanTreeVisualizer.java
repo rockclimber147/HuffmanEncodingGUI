@@ -15,6 +15,8 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
+import java.util.HashMap;
+
 public class HuffmanTreeVisualizer extends Application {
     private final int APP_WIDTH = 750;
     private Group nodeGroup;
@@ -57,8 +59,17 @@ public class HuffmanTreeVisualizer extends Application {
                 stage.setScene(scene);
 
                 // CONSOLE LOGGING
-                System.out.println("CHARACTER FREQUENCIES:\n" + gen.getCharFrequencyMap());
-                System.out.println("\nCHARACTER CODE TABLE:\n" + gen.getCodeTable(rootNode));
+                System.out.println("\nCHARACTER FREQUENCIES:\n" + gen.getCharFrequencyMap());
+                System.out.println("CHARACTER CODE TABLE:\n" + gen.getCodeTable(rootNode));
+
+                String message = gen.getSourceText();
+                HashMap<Character, String> codeTable = gen.getCodeTable(rootNode);
+
+                StringBuilder encodedMessage = new StringBuilder();
+                for (int i = 0; i < message.length(); i++) {
+                    encodedMessage.append(codeTable.get(message.charAt(i)));
+                }
+                System.out.println("Encoded message: " + encodedMessage + "\nbits needed: " + encodedMessage.toString().length());
             })
         );
 
@@ -92,32 +103,42 @@ public class HuffmanTreeVisualizer extends Application {
     }
 
     public void drawNodeRecursive(int x1,int y1,int x,int y, int width, TreeNode node){
+        if (node == null) {
+            return;
+        }
         Line line = new Line(x1, y1, x, y);
         line.setStrokeWidth(2);
         nodeGroup.getChildren().add(line);
 
-        if (node == null) {
-            return;
-        }
-
         Text txt;
         if (node.isLeaf()) {
             txt = new Text(x, y, "'" + node.getCharacter() + "'" + "\n" + node.getCodeValue());
-            Circle circle = new Circle(x, y, txt.getLayoutBounds().getWidth(), Paint.valueOf("lightgrey"));
-            nodeGroup.getChildren().add(circle);
         } else {
-            txt = new Text(x, y + 15, node.getCodeValue());
+            txt = new Text(x, y, node.getCodeValue());
         }
+        Circle circle = new Circle(x, y, txt.getLayoutBounds().getWidth(), Paint.valueOf("lightgrey"));
+        nodeGroup.getChildren().add(circle);
 
         txt.setStyle("-fx-font-weight: bold");
         txt.setTextAlignment(TextAlignment.CENTER);
         txt.setTranslateX(txt.getTranslateX() - (txt.getLayoutBounds().getWidth() / 2));
         nodeGroup.getChildren().add(txt);
 
+        int leftWidth = 0;
+        if (node.getLeft() != null) {
+            leftWidth = node.getLeft().getWidthNeeded();
+        }
+
+        int rightWidth = 0;
+        if (node.getLeft() != null) {
+            rightWidth = node.getRight().getWidthNeeded();
+        }
+
+
         if(node.getLeft() != null)
-            drawNodeRecursive(x,y,x-((width - TreeNode.getNodeSpacing()) / 2),y + 50, node.getLeft().getWidthNeeded(), node.getLeft());
+            drawNodeRecursive(x,y,x-((width - leftWidth)),y + 50, node.getLeft().getWidthNeeded(), node.getLeft());
         if(node.getRight() != null)
-            drawNodeRecursive(x,y,x+((width - TreeNode.getNodeSpacing()) / 2),y + 50, node.getRight().getWidthNeeded(), node.getRight());
+            drawNodeRecursive(x,y,x+((width - rightWidth)),y + 50, node.getRight().getWidthNeeded(), node.getRight());
     }
 
     private void shiftTree(double deltaX, double deltaY) {

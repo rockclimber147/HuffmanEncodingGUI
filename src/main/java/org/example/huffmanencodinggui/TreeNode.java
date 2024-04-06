@@ -1,7 +1,7 @@
 package org.example.huffmanencodinggui;
 
 public class TreeNode {
-    private static final int CHARACTER_PIXEL_WIDTH = 15;
+    private static final int CHARACTER_PIXEL_WIDTH = 10;
     private static final int NODE_SPACING_PIXEL_WIDTH = 10;
     private static int xmlIndentCountIncrement = 2;
     private TreeNode left;

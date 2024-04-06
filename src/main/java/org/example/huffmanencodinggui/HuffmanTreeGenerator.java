@@ -13,6 +13,10 @@ public class HuffmanTreeGenerator {
         this.sourceText = sourceText;
     }
 
+    public String getSourceText() {
+        return sourceText;
+    }
+
     public TreeNode getHuffmanTree(final PriorityQueue<Map.Entry<TreeNode, Integer>> priorityQueue) {
         TreeNode root = new TreeNode();
         if (priorityQueue.size() == 1) {
